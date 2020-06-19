@@ -8,12 +8,25 @@ exports.create = (req, res) => {
       message: "Content can not be empty!"
     });
   }
-  console.log(req.body);
+  var document = req.body.entries;
   // Create a Document
   const new_doc = new Document({
-    id: req.body.id,
-    name: req.body.name,
-    description: req.body.description
+    type : document.type,
+    year : document.year,
+    afc : document.afc,
+    province : document.province,
+    municipal : document.municipal,
+    date_conducted : new Date(document.date_conducted),
+    classification : document.classification,
+    remarks : document.remarks,
+    res_title: document.res_title,
+    res_number: document.res_number,
+    res_date_endorsement: new Date(document.res_date_endorsement),
+    res_endorsed_to: document.res_endorsed_to,
+    adopted: document.adopted,
+    date_adopted: new Date(document.date_adopted)
+
+
   });
 
   // Save Document in the database
@@ -59,17 +72,16 @@ exports.findOne = (req, res) => {
 // Update a Document identified by the DocumentId in the request
 exports.update = (req, res) => {
   // Validate Request
+  console.log("controller", req.body.entries);
   if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
   }
 
-  console.log(111, req.body);
-
   Document.updateById(
     req.params.documentId,
-    new Document(req.body),
+    new Document(req.body.entries),
     (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
@@ -88,6 +100,7 @@ exports.update = (req, res) => {
 
 // Delete a Document with the specified DocumentId in the request
 exports.delete = (req, res) => {
+  console.log(req.params);
   Document.remove(req.params.documentId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
@@ -103,3 +116,19 @@ exports.delete = (req, res) => {
   });
 };
 
+// Find document type
+exports.DocType = (req, res) => {
+  Document.findDocType(req.params.type, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Document with type ${req.params.type}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving Document with type " + req.params.type
+        });
+      }
+    } else res.send(data);
+  });
+};

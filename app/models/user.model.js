@@ -2,13 +2,13 @@ const sql = require("./db.js");
 
 // constructor
 const Users = function(user) {
-  this.email = user.email;
+  this.usermame = user.username;
   this.password = user.password;
 };
 
-Users.login = (email, pwd, result) => {
+Users.login = (username, pwd, result) => {
 
-  sql.query("SELECT * FROM users where email = ? and password = ?", [email, pwd], (err, res) => {
+  sql.query("SELECT * FROM usertable where username = ? and password = ?", [username, pwd], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -17,10 +17,10 @@ Users.login = (email, pwd, result) => {
 
     if(res.length > 0) {
       console.log("Users successfully login: ");
-      result(null, true);
+      result(null, res);
     } else {
       console.log("Users failed login: ");
-      result(null, false);
+      result(err, false);
     }
 
   });

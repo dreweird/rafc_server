@@ -1,6 +1,8 @@
 module.exports = {
-    HOST: "172.16.130.10",
-    USER: "pmis",
-    PASSWORD: "pmis",
-    DB: "rafc"
+    HOST: "172.16.130.20",
+    USER: "pmauser",
+    PASSWORD: "D@pr0p3rty",
+    PORT: "3306",
+   // socketPath: "/var/run/mysqld/mysqld.sock",
+    DB: "rafcdatabase"
   };

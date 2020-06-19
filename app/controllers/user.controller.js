@@ -9,13 +9,19 @@ exports.login = (req, res) => {
     });
   }
 
-  User.login(req.body.email, req.body.password, (err, data) => {
+  User.login(req.body.username, req.body.password, (err, data) => {
+    console.log(data);
     if (err)
       res.status(500).send({
         message:
           err.message || "Some error occurred while authenticating."
       });
-    else res.send(data);
+      if(data){
+        res.send({user_id: data[0].id, username: data[0].username, isAdmin: data[0].isAdmin});
+      }else{
+        res.status(401).json('Invalid Username or Password');
+      }
+
   });
 };
 
